@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+
+<body>
+    <h1>Register</h1>
+
+    {% if errors %}
+    <ul style="color:red;">
+        {% for e in errors %}
+        <li>{{ e }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form action="/register" method="POST">
+        <label>Full Name</label><br>
+        <input type="text" name="name" value="{{ name|default('') }}"><br><br>
+
+        <label>National ID</label><br>
+        <input type="text" name="national_id" value="{{ national_id|default('') }}"><br><br>
+
+        <label>Email</label><br>
+        <input type="email" name="email" value="{{ email|default('') }}"><br><br>
+
+        <label>Phone</label><br>
+        <input type="text" name="phone" value="{{ phone|default('') }}"><br><br>
+
+        <label>Password</label><br>
+        <input type="password" name="password"><br><br>
+
+        <label>Confirm Password</label><br>
+        <input type="password" name="confirm_password"><br><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <p>Already have an account? <a href="/login">Login</a></p>
+</body>
+
+</html>

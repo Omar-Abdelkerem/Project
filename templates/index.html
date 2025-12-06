@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My ID System - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+</head>
+
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<header class="navbar">
+    <div class="container nav-inner">
+        <div class="logo">
+            <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo"></a>
+        </div>
+
+        <nav class="links" id="nav-links">
+            <a href="/" class="nav-link">Home</a>
+            <a href="/register" class="nav-link">Register</a>
+            <a href="/login" class="nav-link">Login</a>
+        </nav>
+
+        <button class="nav-toggle" id="nav-toggle">☰</button>
+    </div>
+</header>
+
+
+<!-- ===================== HERO SECTION ===================== -->
+<section class="hero container">
+    <div class="hero-text">
+        <h1>Apply for Your National ID or Bank Card Online</h1>
+        <p>Create an account, submit your application, and track your request instantly.</p>
+
+        <div class="hero-btns">
+            <a href="/register" class="btn">Register</a>
+            <a href="/login" class="btn-outline">Login</a>
+        </div>
+    </div>
+
+    <div class="hero-img">
+        <img src="{{ url_for('static', filename='img/hero.png') }}" alt="hero">
+    </div>
+</section>
+
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="how container">
+    <h2>How It Works</h2>
+
+    <div class="steps">
+        <div class="step">
+            <div class="num">1</div>
+            <h3>Register</h3>
+            <p>Create your account with basic information.</p>
+        </div>
+
+        <div class="step">
+            <div class="num">2</div>
+            <h3>Login</h3>
+            <p>Sign in to access the system.</p>
+        </div>
+
+        <div class="step">
+            <div class="num">3</div>
+            <h3>Submit Application</h3>
+            <p>Apply for a National ID or Bank Card.</p>
+        </div>
+
+        <div class="step">
+            <div class="num">4</div>
+            <h3>Track Status</h3>
+            <p>Track your application status in real time.</p>
+        </div>
+    </div>
+</section>
+
+{% include 'partials/footer.html' %}
+
+<script>
+    const toggle = document.getElementById("nav-toggle");
+    const links = document.getElementById("nav-links");
+
+    toggle.addEventListener("click", () => {
+        links.classList.toggle("open");
+    });
+</script>
+
+</body>
+</html>
