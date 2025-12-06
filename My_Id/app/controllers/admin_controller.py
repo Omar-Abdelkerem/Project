@@ -1,6 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 import os
 import csv
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 admin_bp = Blueprint("admin", __name__)
 
@@ -18,10 +22,15 @@ def get_all_requests():
 def update_request_status(request_id, new_status):
     """Update request status in CSV."""
     rows = []
-    with open(CSV_PATH, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        rows = list(reader)
+    try:
+        with open(CSV_PATH, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+    except FileNotFoundError:
+        logger.error(f"CSV file not found: {CSV_PATH}")
+        raise
 
+    found = False
     for row in rows:
         rid = row.get("RequestID") or row.get("id")
         if rid == request_id:
@@ -29,15 +38,26 @@ def update_request_status(request_id, new_status):
                 row["Status"] = new_status
             else:
                 row["status"] = new_status
+            found = True
             break
 
+    if not found:
+        logger.warning(f"Request {request_id} not found in CSV")
+
     if not rows:
+        logger.warning("CSV is empty, nothing to write")
         return
+
     fieldnames = rows[0].keys()
-    with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(rows)
+    try:
+        with open(CSV_PATH, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            writer.writerows(rows)
+        logger.debug(f"CSV file written successfully with {len(rows)} rows")
+    except IOError as e:
+        logger.error(f"Failed to write CSV: {str(e)}")
+        raise
 
 def filter_requests(filter_type):
     """Filter requests by status."""
@@ -61,16 +81,26 @@ def admin_action():
     request_id = request.form.get("request_id")
     action = request.form.get("action")
 
-    print(f"DEBUG: Received request_id={request_id}, action={action}")
+    if not request_id or not action:
+        logger.warning("Missing request_id or action in form data")
+        flash("Invalid request ID or action.", "error")
+        return redirect(url_for("admin.admin_dashboard"))
 
-    if action == "approve":
-        update_request_status(request_id, "Approved")
-        print(f"DEBUG: Updated {request_id} to Approved")
-        flash(f"Request {request_id} approved.", "success")
-    elif action == "reject":
-        update_request_status(request_id, "Rejected")
-        print(f"DEBUG: Updated {request_id} to Rejected")
-        flash(f"Request {request_id} rejected.", "warning")
+    if action not in ["approve", "reject"]:
+        logger.warning(f"Unknown action: {action}")
+        flash(f"Unknown action: {action}", "error")
+        return redirect(url_for("admin.admin_dashboard"))
+
+    logger.info(f"Processing {action} for request_id={request_id}")
+
+    try:
+        new_status = "Approved" if action == "approve" else "Rejected"
+        update_request_status(request_id, new_status)
+        logger.info(f"Successfully updated {request_id} to {new_status}")
+        flash(f"Request {request_id} {action}d successfully.", "success")
+    except Exception as e:
+        logger.error(f"Failed to update {request_id}: {str(e)}")
+        flash(f"Error processing request: {str(e)}", "error")
 
     return redirect(url_for("admin.admin_dashboard"))
 
