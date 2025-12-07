@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+<body>
+  <div class="dashboard">
+    <header>Admin Dashboard</header>
+    <main class="content">
+
+      {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, msg in messages %}
+              <div class="flash {{ category }}">{{ msg }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      
+      <form method="POST" action="/admin/filter" style="width: 100%;">
+        <div class="button-row">
+          <button type="submit" name="filter" value="all" class="pill-btn">View All Requests</button>
+          <button type="submit" name="filter" value="pending" class="pill-btn">Pending Requests</button>
+          <button type="submit" name="filter" value="in_process" class="pill-btn">In Process Requests</button>
+        </div>
+      </form>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>RequestID</th>
+              <th>User</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in requests %}
+            <tr>
+              <td>{{ r.RequestID }}</td>
+              <td>{{ r.Citizen }}</td>
+              <td>{{ r.Type }}</td>
+              <td>{{ r.Status }}</td>
+              <td class="action-cell">
+                {% set status = (r.Status|default(r.status)) %}
+                <span id="actions-{{ r.RequestID }}" style="display: {{ 'inline' if status == 'Pending' else 'none' }};">
+                  <form method="POST" action="/admin/action" style="display: inline;">
+                    <input type="hidden" name="request_id" value="{{ r.RequestID }}">
+                    <button type="submit" name="action" value="approve" class="action-pill">Approve</button>
+                  </form>
+                  <form method="POST" action="/admin/action" style="display: inline;">
+                    <input type="hidden" name="request_id" value="{{ r.RequestID }}">
+                    <button type="submit" name="action" value="reject" class="action-pill">Reject</button>
+                  </form>
+                </span>
+                {% if status != 'Pending' %}
+                  {% set typ = (r.Type|default(r.type)) %}
+                  {% if typ in ['Delivered', 'Picked up', 'Picked Up', 'delivered'] %}
+                    <span class="dispatched-text">Dispatched</span>
+                  {% else %}
+                    <button type="button" class="change-btn" data-id="{{ r.RequestID }}">Change</button>
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList && e.target.classList.contains('change-btn')) {
+        const id = e.target.dataset.id;
+        const actions = document.getElementById('actions-' + id);
+        if (!actions) return;
+        const isHidden = window.getComputedStyle(actions).display === 'none';
+        actions.style.display = isHidden ? 'inline' : 'none';
+        e.target.textContent = isHidden ? 'Cancel' : 'Change';
+      }
+    });
+  </script>
+</body>
+</html>
