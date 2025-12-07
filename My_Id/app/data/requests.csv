@@ -1,0 +1,6 @@
+RequestID,Citizen,Type,Status
+R-1001,Ali Mohamed,Pickup,Approved
+R-1002,Mariam F.,Delivery,Approved
+R-1003,Mariam F.,Return,Approved
+R-1004,Ahmed Hassan,Pickup,Approved
+R-1005,Sara Ali,Delivery,In Process
