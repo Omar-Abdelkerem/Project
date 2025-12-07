@@ -2,6 +2,9 @@ from flask import Flask, render_template, request
 import csv
 import uuid
 import os
+from controllers.UserController import UserController
+
+app.register_blueprint(UserController)
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 
@@ -103,3 +106,7 @@ def login():
 if __name__ == '__main__':
     init_users_csv()
     app.run(debug=True)
+
+
+
+
