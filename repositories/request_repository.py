@@ -1,5 +1,5 @@
 import csv
-from app.core.file_singleton import FileSingleton
+from core.file_singleton import FileSingleton
 
 class RequestRepository:
     def __init__(self, file_path):

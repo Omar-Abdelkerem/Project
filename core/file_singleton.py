@@ -15,5 +15,10 @@ class FileSingleton:
         return FileSingleton._instance
 
     def read_csv(self, path):
-        with open(path, newline="", encoding="utf-8") as f:
-            return list(csv.DictReader(f))
+        try:
+            with open(path, newline="", encoding="utf-8") as f:
+                return list(csv.DictReader(f))
+        except FileNotFoundError:
+            return []
+        except Exception as e:
+            raise Exception(f"Error reading CSV file {path}: {str(e)}")

@@ -3,24 +3,18 @@ import csv
 import uuid
 import os
 import sys
-from controllers.UserController import UserController
+from controllers.UserController import user_controller
+from controllers.admin_controller import admin_bp
+
 BASE_DIR = os.path.dirname(__file__)
 sys.path.insert(0, BASE_DIR)
 
-app = Flask(
-    __name__,
-    template_folder=os.path.join(BASE_DIR, "app", "templates"),
-    static_folder=os.path.join(BASE_DIR, "app", "static"),
-)
+app = Flask(__name__, template_folder='templates', static_folder='static')
 
 app.secret_key = os.environ.get("FLASK_SECRET", "dev-secret-change-me")
 
-from app.controllers.admin_controller import admin_bp
 app.register_blueprint(admin_bp)
-
-app.register_blueprint(UserController)
-
-app = Flask(__name__, template_folder='templates', static_folder='static')
+app.register_blueprint(user_controller)
 
 DATA_FILE = os.path.join('data', 'users.csv')
 
@@ -107,13 +101,13 @@ def register():
             'CITIZEN'
         ])
 
-    return render_template('success.html')
+    return render_template('register.html', success=True, message='Registration successful! Please login.')
 
 
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
+@app.route('/login', methods=['GET'])
+def login_page():
+    return render_template('Login.html')
 
 
 

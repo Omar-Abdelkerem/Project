@@ -3,43 +3,106 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register - Fast ID System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
 </head>
 
 <body>
-    <h1>Register</h1>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-inner">
+            <div class="logo">
+                <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo"></a>
+            </div>
+            <nav class="links" id="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/register" class="nav-link">Register</a>
+                <a href="/login" class="nav-link">Login</a>
+            </nav>
+            <button class="nav-toggle" id="nav-toggle">☰</button>
+        </div>
+    </header>
 
-    {% if errors %}
-    <ul style="color:red;">
-        {% for e in errors %}
-        <li>{{ e }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-wrapper">
+            <div class="form-header">
+                <h1>Create Account</h1>
+                <p>Join us to get started with your ID application</p>
+            </div>
 
-    <form action="/register" method="POST">
-        <label>Full Name</label><br>
-        <input type="text" name="name" value="{{ name|default('') }}"><br><br>
+            {% if success %}
+            <div class="alert-success">
+                {{ message|default('Registration successful! Please login.') }}
+            </div>
+            {% endif %}
 
-        <label>National ID</label><br>
-        <input type="text" name="national_id" value="{{ national_id|default('') }}"><br><br>
+            {% if errors %}
+            <div class="alert-error">
+                <ul class="error-list">
+                    {% for e in errors %}
+                    <li>{{ e }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
 
-        <label>Email</label><br>
-        <input type="email" name="email" value="{{ email|default('') }}"><br><br>
+            <form action="/register" method="POST">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" value="{{ name|default('') }}" placeholder="Enter your full name" required>
+                </div>
 
-        <label>Phone</label><br>
-        <input type="text" name="phone" value="{{ phone|default('') }}"><br><br>
+                <div class="form-group">
+                    <label for="national_id">National ID</label>
+                    <input type="text" id="national_id" name="national_id" value="{{ national_id|default('') }}" placeholder="Enter 14-digit National ID" maxlength="14" required>
+                </div>
 
-        <label>Password</label><br>
-        <input type="password" name="password"><br><br>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ email|default('') }}" placeholder="Enter your email" required>
+                </div>
 
-        <label>Confirm Password</label><br>
-        <input type="password" name="confirm_password"><br><br>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="text" id="phone" name="phone" value="{{ phone|default('') }}" placeholder="Enter your phone number" required>
+                </div>
 
-        <button type="submit">Register</button>
-    </form>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required>
+                </div>
 
-    <p>Already have an account? <a href="/login">Login</a></p>
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                </div>
+
+                <button type="submit" class="form-submit">Register</button>
+            </form>
+
+            <div class="form-footer">
+                <p>Already have an account? <a href="/login">Login here</a></p>
+            </div>
+        </div>
+    </div>
+
+    {% include 'partials/footer.html' %}
+
+    <script>
+        const toggle = document.getElementById("nav-toggle");
+        const links = document.getElementById("nav-links");
+
+        if (toggle) {
+            toggle.addEventListener("click", () => {
+                links.classList.toggle("open");
+            });
+        }
+    </script>
 </body>
 
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
 <body>
   <div class="dashboard">
@@ -56,7 +56,7 @@
                   </form>
                   <form method="POST" action="/admin/action" style="display: inline;">
                     <input type="hidden" name="request_id" value="{{ r.RequestID }}">
-                    <button type="submit" name="action" value="reject" class="action-pill">Reject</button>
+                    <button type="submit" name="action" value="reject" class="action-pill reject-btn">Reject</button>
                   </form>
                 </span>
                 {% if status != 'Pending' %}
