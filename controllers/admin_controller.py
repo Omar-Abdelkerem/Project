@@ -9,14 +9,21 @@ logger = logging.getLogger(__name__)
 admin_bp = Blueprint("admin", __name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-CSV_PATH = os.path.join(BASE_DIR, "app", "data", "requests.csv")
+CSV_PATH = os.path.join(BASE_DIR, "data", "requests.csv")
 
 def get_all_requests():
     """Read all requests from CSV."""
     rows = []
-    with open(CSV_PATH, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        rows = list(reader)
+    try:
+        with open(CSV_PATH, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+    except FileNotFoundError:
+        logger.warning(f"CSV file not found: {CSV_PATH}, returning empty list")
+        return []
+    except Exception as e:
+        logger.error(f"Error reading CSV file: {str(e)}")
+        return []
     return rows
 
 def update_request_status(request_id, new_status):

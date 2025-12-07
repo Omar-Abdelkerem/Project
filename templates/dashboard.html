@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - Fast ID System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <style>
+        .dashboard-container {
+            padding: 3rem 1rem;
+            min-height: calc(100vh - 200px);
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            color: var(--muted);
+            font-size: 1.1rem;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, var(--white) 0%, #f8f9fa 100%);
+            padding: 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .dashboard-card:nth-child(1)::before {
+            background: linear-gradient(90deg, #0057d8, #00a8ff);
+        }
+
+        .dashboard-card:nth-child(2)::before {
+            background: linear-gradient(90deg, #00a8ff, #51cf66);
+        }
+
+        .dashboard-card:nth-child(3)::before {
+            background: linear-gradient(90deg, #51cf66, #ffd43b);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .dashboard-card-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-card:nth-child(1) .dashboard-card-icon {
+            background: linear-gradient(135deg, #0057d8, #00a8ff);
+        }
+
+        .dashboard-card:nth-child(2) .dashboard-card-icon {
+            background: linear-gradient(135deg, #00a8ff, #51cf66);
+        }
+
+        .dashboard-card:nth-child(3) .dashboard-card-icon {
+            background: linear-gradient(135deg, #51cf66, #ffd43b);
+        }
+
+        .dashboard-card h3 {
+            color: var(--dark);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-card p {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-card .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-inner">
+            <div class="logo">
+                <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo"></a>
+            </div>
+            <nav class="links" id="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/register" class="nav-link">Register</a>
+                <a href="/login" class="nav-link">Login</a>
+            </nav>
+            <button class="nav-toggle" id="nav-toggle">☰</button>
+        </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Welcome to Fast ID System</h1>
+                <p>Manage your ID and card requests easily</p>
+            </div>
+
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">🆔</div>
+                    <h3>Request National ID Card</h3>
+                    <p>Apply for a new National ID card or renew your existing one</p>
+                    <a href="#" class="btn">Request Now</a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">💳</div>
+                    <h3>Request Bank Card</h3>
+                    <p>Apply for a new bank card or replace a lost one</p>
+                    <a href="#" class="btn">Request Now</a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="dashboard-card-icon">📊</div>
+                    <h3>Track Requests</h3>
+                    <p>Check the status of your submitted applications</p>
+                    <a href="#" class="btn">Track Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'partials/footer.html' %}
+
+    <script>
+        const toggle = document.getElementById("nav-toggle");
+        const links = document.getElementById("nav-links");
+
+        if (toggle) {
+            toggle.addEventListener("click", () => {
+                links.classList.toggle("open");
+            });
+        }
+    </script>
+</body>
+</html>
+

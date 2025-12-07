@@ -71,6 +71,33 @@ body {
   box-shadow: 0 8px 14px rgba(82, 164, 34, 0.45);
 }
 
+.pill-btn[value="all"] {
+  background: linear-gradient(135deg, #0057d8, #00a8ff);
+  box-shadow: 0 6px 10px rgba(0, 87, 216, 0.35);
+}
+
+.pill-btn[value="all"]:hover {
+  box-shadow: 0 8px 14px rgba(0, 87, 216, 0.45);
+}
+
+.pill-btn[value="pending"] {
+  background: linear-gradient(135deg, #ffd43b, #ffa500);
+  box-shadow: 0 6px 10px rgba(255, 212, 59, 0.35);
+}
+
+.pill-btn[value="pending"]:hover {
+  box-shadow: 0 8px 14px rgba(255, 212, 59, 0.45);
+}
+
+.pill-btn[value="in_process"] {
+  background: linear-gradient(135deg, #00a8ff, #51cf66);
+  box-shadow: 0 6px 10px rgba(0, 168, 255, 0.35);
+}
+
+.pill-btn[value="in_process"]:hover {
+  box-shadow: 0 8px 14px rgba(0, 168, 255, 0.45);
+}
+
 .table-wrapper {
   margin-top: 18px;
   border-radius: 12px;
@@ -129,11 +156,71 @@ tbody td.action-cell {
   box-shadow: 0 4px 6px rgba(82, 164, 34, 0.35);
   transition: all 0.3s ease;
   transform: scale(1);
+  margin: 2px;
 }
 
 .action-pill:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 12px rgba(82, 164, 34, 0.5);
+}
+
+.action-pill.reject-btn,
+.action-pill[value="reject"] {
+  background: #ff6b6b;
+  box-shadow: 0 4px 6px rgba(255, 107, 107, 0.35);
+}
+
+.action-pill.reject-btn:hover,
+.action-pill[value="reject"]:hover {
+  background: #ff5252;
+  box-shadow: 0 6px 12px rgba(255, 107, 107, 0.5);
+}
+
+.change-btn {
+  background: #ffd43b;
+  color: #333;
+  border: none;
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(255, 212, 59, 0.35);
+  transition: all 0.3s ease;
+}
+
+.change-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(255, 212, 59, 0.5);
+}
+
+.dispatched-text {
+  color: #51cf66;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.flash-messages {
+  margin-bottom: 1rem;
+}
+
+.flash {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.flash.success {
+  background: #d4edda;
+  color: #155724;
+  border-left: 4px solid #51cf66;
+}
+
+.flash.error {
+  background: #f8d7da;
+  color: #721c24;
+  border-left: 4px solid #ff6b6b;
 }
 
 @media (max-width: 480px) {

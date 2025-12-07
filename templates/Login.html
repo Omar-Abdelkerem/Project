@@ -1,23 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login - Fast ID System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
 </head>
 <body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-inner">
+            <div class="logo">
+                <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="logo"></a>
+            </div>
+            <nav class="links" id="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/register" class="nav-link">Register</a>
+                <a href="/login" class="nav-link">Login</a>
+            </nav>
+            <button class="nav-toggle" id="nav-toggle">☰</button>
+        </div>
+    </header>
 
-<h2>Fast ID System - Login</h2>
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-wrapper">
+            <div class="form-header">
+                <h2>Welcome Back</h2>
+                <p>Login to access your account</p>
+            </div>
 
-<form action="/login" method="POST">
+            <form action="/login" method="POST">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
 
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
+                <button type="submit" class="form-submit">Login</button>
+            </form>
 
-    <button type="submit">Login</button>
+            <div class="form-footer">
+                <p>Don't have an account? <a href="/register">Register here</a></p>
+            </div>
+        </div>
+    </div>
 
-</form>
+    {% include 'partials/footer.html' %}
 
+    <script>
+        const toggle = document.getElementById("nav-toggle");
+        const links = document.getElementById("nav-links");
+
+        if (toggle) {
+            toggle.addEventListener("click", () => {
+                links.classList.toggle("open");
+            });
+        }
+    </script>
 </body>
 </html>
