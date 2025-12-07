@@ -2,7 +2,21 @@ from flask import Flask, render_template, request
 import csv
 import uuid
 import os
+import sys
 from controllers.UserController import UserController
+BASE_DIR = os.path.dirname(__file__)
+sys.path.insert(0, BASE_DIR)
+
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "app", "templates"),
+    static_folder=os.path.join(BASE_DIR, "app", "static"),
+)
+
+app.secret_key = os.environ.get("FLASK_SECRET", "dev-secret-change-me")
+
+from app.controllers.admin_controller import admin_bp
+app.register_blueprint(admin_bp)
 
 app.register_blueprint(UserController)
 
