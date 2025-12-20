@@ -16,6 +16,12 @@ app.secret_key = os.environ.get("FLASK_SECRET", "dev-secret-change-me")
 app.register_blueprint(admin_bp)
 app.register_blueprint(user_controller)
 
+# Register new controllers
+from controllers.ApplicationController import application_bp
+from controllers.DeliveryController import delivery_bp
+app.register_blueprint(application_bp)
+app.register_blueprint(delivery_bp)
+
 DATA_FILE = os.path.join('data', 'users.csv')
 
 
