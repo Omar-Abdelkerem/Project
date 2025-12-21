@@ -1,0 +1,36 @@
+<h2>My Deliveries</h2>
+
+<table>
+  <tr>
+    <th>Order ID</th>
+    <th>Status</th>
+    <th>Action</th>
+  </tr>
+
+  {% for d in deliveries %}
+  <tr>
+    <td>{{ d.order_id }}</td>
+    <td>{{ d.status }}</td>
+    <td>
+      {% if d.status == "Pending" %}
+      <form method="post" action="/delivery/update/{{ d.id }}">
+        <input type="hidden" name="status" value="Out for Delivery">
+        <button>Out for Delivery</button>
+      </form>
+      {% elif d.status == "Out for Delivery" %}
+      <form method="post" action="/delivery/update/{{ d.id }}">
+        <input type="hidden" name="status" value="Delivered">
+        <button>Delivered</button>
+      </form>
+
+      <form method="post" action="/delivery/update/{{ d.id }}">
+        <input type="hidden" name="status" value="Failed">
+        <button>Failed</button>
+      </form>
+      {% else %}
+        ✔ Done
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
