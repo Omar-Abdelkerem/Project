@@ -2,12 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Fast ID System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
 <body>
+  <!-- Header/Navbar -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <div class="logo">
+        <a href="/">
+          <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Fast ID System Logo">
+          <span class="logo-text">Fast ID System</span>
+        </a>
+      </div>
+      <nav class="links" id="nav-links">
+        <span class="nav-link user-info">Welcome, {{ session.get('name', 'Admin') }}!</span>
+        <a href="{{ url_for('user_controller.logout') }}" class="nav-link logout-btn">Logout</a>
+      </nav>
+      <button class="nav-toggle" id="nav-toggle">☰</button>
+    </div>
+  </header>
+
   <div class="dashboard">
-    <header>Admin Dashboard</header>
+    <header class="dashboard-header">
+      <h1>Admin Dashboard</h1>
+      <p class="subtitle">Review and manage all National ID card applications</p>
+    </header>
     <main class="content">
 
       {% with messages = get_flashed_messages(with_categories=True) %}
@@ -30,12 +53,13 @@
       </form>
 
       <div class="table-wrapper">
+        {% if requests %}
         <table>
           <thead>
             <tr>
-              <th>RequestID</th>
-              <th>User</th>
-              <th>Type</th>
+              <th>Request ID</th>
+              <th>Citizen</th>
+              <th>Application Type</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -46,7 +70,11 @@
               <td>{{ r.RequestID }}</td>
               <td>{{ r.Citizen }}</td>
               <td>{{ r.Type }}</td>
-              <td>{{ r.Status }}</td>
+              <td>
+                <span class="status-badge status-{{ r.Status|lower|replace(' ', '-') }}">
+                  {{ r.Status }}
+                </span>
+              </td>
               <td class="action-cell">
                 {% set status = (r.Status|default(r.status)) %}
                 <span id="actions-{{ r.RequestID }}" style="display: {{ 'inline' if status == 'Pending' else 'none' }};">
@@ -72,10 +100,31 @@
             {% endfor %}
           </tbody>
         </table>
+        {% else %}
+        <div style="text-align: center; padding: 3rem; color: #6c757d;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+          <p style="font-size: 1.2rem; font-weight: 600;">No requests found.</p>
+          <p style="font-size: 0.9rem; margin-top: 0.5rem;">Check if requests.csv file exists in the data folder.</p>
+        </div>
+        {% endif %}
       </div>
     </main>
   </div>
+
+  <!-- Footer -->
+  {% include 'partials/footer.html' %}
+
   <script>
+    // Mobile menu toggle
+    const toggle = document.getElementById("nav-toggle");
+    const links = document.getElementById("nav-links");
+    if (toggle) {
+      toggle.addEventListener("click", () => {
+        links.classList.toggle("open");
+      });
+    }
+
+    // Change button functionality
     document.addEventListener('click', function(e) {
       if (e.target && e.target.classList && e.target.classList.contains('change-btn')) {
         const id = e.target.dataset.id;

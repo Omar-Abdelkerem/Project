@@ -1,6 +1,9 @@
-RequestID,Citizen,Type,Status
-R-1001,Ali Mohamed,Pickup,Approved
-R-1002,Mariam F.,Delivery,Approved
-R-1003,Mariam F.,Return,Approved
-R-1004,Ahmed Hassan,Pickup,Approved
-R-1005,Sara Ali,Delivery,In Process
+RequestID,TrackingID,CitizenID,Citizen,Type,Status,Description,DocumentPath,CreatedAt
+R-1001,TRK-A1B2C3D4,,Ali Mohamed,New ID Card,Pending,First time applying for National ID card,,2025-01-15 10:00:00
+R-1002,TRK-E5F6G7H8,,Mariam F.,ID Card Replacement,Pending,Lost my ID card, need replacement,,2025-01-15 11:00:00
+R-1003,TRK-I9J0K1L2,,Omar Hassan,ID Card Renewal,Pending,My ID card expired, need renewal,,2025-01-15 12:00:00
+R-1004,TRK-M3N4O5P6,,Ahmed Hassan,New ID Card,Approved,New National ID card application,doc1.pdf,2025-01-14 09:00:00
+R-1005,TRK-Q7R8S9T0,,Sara Ali,ID Card Replacement,Approved,Replacement for damaged card,doc2.jpg,2025-01-14 10:00:00
+R-1006,TRK-U1V2W3X4,,Fatima Ahmed,ID Card Renewal,In Process,Renewal application in review,doc3.png,2025-01-13 14:00:00
+R-1007,TRK-Y5Z6A7B8,,Khaled Mohamed,ID Card Update,In Process,Update address information,doc4.pdf,2025-01-13 15:00:00
+R-1008,TRK-C9D0E1F2,,Nour Ali,New ID Card,Rejected,Incomplete documentation provided,,2025-01-12 16:00:00
