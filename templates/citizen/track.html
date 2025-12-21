@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Application - Fast ID System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/citizen.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container nav-inner">
+            <div class="logo">
+                <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo"></a>
+            </div>
+            <nav class="links">
+                <a href="{{ url_for('citizen.citizen_dashboard') }}" class="nav-link">My Applications</a>
+                <a href="{{ url_for('user_controller.logout') }}" class="nav-link logout-btn">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="citizen-main">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Track National ID Card Application</h1>
+                <p class="subtitle">Enter your Tracking ID to view your National ID card application status</p>
+            </div>
+
+            <form method="POST" class="track-form">
+                <div class="form-group">
+                    <label for="tracking_id">Tracking ID</label>
+                    <input type="text" id="tracking_id" name="tracking_id" 
+                           value="{{ tracking_id or '' }}" 
+                           placeholder="TRK-XXXXXXXX" 
+                           required 
+                           style="text-transform: uppercase;">
+                </div>
+                <button type="submit" class="btn btn-primary">Track</button>
+            </form>
+
+            {% if request %}
+                <div class="tracking-result">
+                    <h2>National ID Card Application Details</h2>
+                    <div class="info-card">
+                        <div class="info-row">
+                            <strong>Tracking ID:</strong> {{ request.get('TrackingID', 'N/A') }}
+                        </div>
+                        <div class="info-row">
+                            <strong>Request ID:</strong> {{ request.get('RequestID', 'N/A') }}
+                        </div>
+                        <div class="info-row">
+                            <strong>Type:</strong> {{ request.Type }}
+                        </div>
+                        <div class="info-row">
+                            <strong>Status:</strong> 
+                            <span class="status-badge status-{{ request.Status|lower|replace(' ', '-') }}">
+                                {{ request.Status }}
+                            </span>
+                        </div>
+                        <div class="info-row">
+                            <strong>Submitted:</strong> {{ request.get('CreatedAt', 'N/A') }}
+                        </div>
+                        {% if request.get('Description') %}
+                        <div class="info-row">
+                            <strong>Description:</strong> {{ request.Description }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if status_history %}
+                        <h3>Status History</h3>
+                        <div class="timeline">
+                            {% for event in status_history %}
+                                <div class="timeline-item">
+                                    <div class="timeline-date">{{ event.timestamp }}</div>
+                                    <div class="timeline-content">
+                                        <strong>{{ event.action }}</strong> by {{ event.actor }}
+                                        {% if event.details %}
+                                            <br><small>{{ event.details }}</small>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

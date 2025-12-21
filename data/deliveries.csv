@@ -1,0 +1,7 @@
+DeliveryID,RequestID,AgentID,Status,OutForDeliveryAt,DeliveredAt,FailedAt
+1,R-1004,2,Delivered,2025-12-19 21:15:19,2025-12-19 21:15:23,
+2,R-1005,2,Out for Delivery,2025-01-15 10:30:00,,
+3,R-1006,2,Pending,,,
+4,R-1007,2,Delivered,2025-01-14 09:00:00,2025-01-14 15:30:00,
+5,R-1001,2,Delivered,2025-12-19 21:15:26,2025-12-19 21:15:28,
+6,R-1002,2,Pending,,,

@@ -1,0 +1,176 @@
+/* Citizen Dashboard Styles */
+.citizen-main {
+    min-height: calc(100vh - 200px);
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-header .subtitle {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.notifications-alert {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.applications-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.applications-table thead {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.applications-table th {
+    padding: 1.25rem 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.applications-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.tracking-id {
+    font-family: monospace;
+    font-weight: 600;
+    color: #667eea;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-pending { background: #fff3cd; color: #856404; }
+.status-approved { background: #d1e7dd; color: #0f5132; }
+.status-rejected { background: #f8d7da; color: #842029; }
+.status-in-process { background: #cfe2ff; color: #084298; }
+.status-delivered { background: #d1e7dd; color: #0f5132; }
+.status-completed { background: #d1e7dd; color: #0f5132; }
+
+.track-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tracking-result {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.info-card {
+    margin: 1rem 0;
+}
+
+.info-row {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.timeline {
+    margin-top: 2rem;
+}
+
+.timeline-item {
+    padding: 1rem;
+    border-left: 3px solid #667eea;
+    margin-bottom: 1rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.timeline-date {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.notifications-list {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.notification-item {
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-item.unread {
+    background: #e7f3ff;
+    font-weight: 600;
+}
+
+.notification-meta {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-top: 0.5rem;
+}
+
+.badge {
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+.btn-info {
+    background: #17a2b8;
+    color: white;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Fast ID System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/citizen.css') }}">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container nav-inner">
+            <div class="logo">
+                <a href="/"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo"></a>
+            </div>
+            <nav class="links">
+                <a href="{{ url_for('citizen.citizen_dashboard') }}" class="nav-link">My Applications</a>
+                <a href="{{ url_for('user_controller.logout') }}" class="nav-link logout-btn">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="citizen-main">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Notifications</h1>
+                <p class="subtitle">All your application updates and notifications</p>
+            </div>
+
+            {% if notifications %}
+                <div class="notifications-list">
+                    {% for notif in notifications %}
+                        <div class="notification-item {% if notif.Read.lower() == 'false' %}unread{% endif %}">
+                            <div class="notification-content">
+                                <h3>{{ notif.Message }}</h3>
+                                <p class="notification-meta">
+                                    <span class="notification-type">{{ notif.Type }}</span>
+                                    <span class="notification-date">{{ notif.CreatedAt }}</span>
+                                </p>
+                            </div>
+                            {% if notif.Read.lower() == 'false' %}
+                                <form method="POST" action="{{ url_for('citizen.mark_notification_read', notification_id=notif.NotificationID) }}" style="display: inline;">
+                                    <button type="submit" class="btn btn-sm">Mark as Read</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>No notifications yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

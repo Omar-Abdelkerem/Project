@@ -7,28 +7,36 @@
 body {
   margin: 0;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 .dashboard {
-  width: min(480px, 90vw);
-  background: #1b6ddf;
-  border-radius: 48px;
+  width: min(95%, 1200px);
+  margin: 2rem auto;
+  background: white;
+  border-radius: 12px;
   padding: 0;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
 
-.dashboard header {
-  background: #1b6ddf;
-  border-radius: 48px 48px 0 0;
-  padding: 20px 16px;
+.dashboard-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
   color: white;
   text-align: center;
+}
+
+.dashboard-header h1 {
+  margin: 0;
   font-weight: 700;
-  font-size: 28px;
+  font-size: 2.5rem;
+}
+
+.dashboard-header .subtitle {
+  margin: 0.5rem 0 0 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
 }
 
 .content {
@@ -223,7 +231,84 @@ tbody td.action-cell {
   border-left: 4px solid #ff6b6b;
 }
 
-@media (max-width: 480px) {
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-approved {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.status-in-process {
+  background-color: #cfe2ff;
+  color: #084298;
+}
+
+.status-rejected {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+.status-completed {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.status-failed {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+/* User Info in Navbar */
+.user-info {
+  color: #495057;
+  font-weight: 500;
+  margin-right: 1rem;
+}
+
+.logout-btn {
+  background: #dc3545;
+  color: white !important;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background 0.3s;
+  text-decoration: none;
+}
+
+.logout-btn:hover {
+  background: #c82333;
+  color: white !important;
+}
+
+.logo-text {
+  margin-left: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    width: 95%;
+    margin: 1rem auto;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+  }
+
   .pill-btn {
     flex: 1 1 100%;
     text-align: center;
