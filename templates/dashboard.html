@@ -149,30 +149,30 @@
     <div class="dashboard-container">
         <div class="container">
             <div class="dashboard-header">
-                <h1>Welcome to Fast ID System</h1>
-                <p>Manage your ID and card requests easily</p>
+                <h1>Welcome to My ID System</h1>
+                <p>Manage your National ID card applications easily</p>
             </div>
 
             <div class="dashboard-cards">
                 <div class="dashboard-card">
                     <div class="dashboard-card-icon">🆔</div>
-                    <h3>Request National ID Card</h3>
-                    <p>Apply for a new National ID card or renew your existing one</p>
-                    <a href="#" class="btn">Request Now</a>
+                    <h3>Apply for National ID Card</h3>
+                    <p>Submit a new application for your National ID card</p>
+                    <a href="{{ url_for('citizen.apply') }}" class="btn">Apply Now</a>
                 </div>
 
                 <div class="dashboard-card">
-                    <div class="dashboard-card-icon">💳</div>
-                    <h3>Request Bank Card</h3>
-                    <p>Apply for a new bank card or replace a lost one</p>
-                    <a href="#" class="btn">Request Now</a>
+                    <div class="dashboard-card-icon">📋</div>
+                    <h3>My Applications</h3>
+                    <p>View all your submitted National ID card applications</p>
+                    <a href="{{ url_for('citizen.citizen_dashboard') }}" class="btn">View Applications</a>
                 </div>
 
                 <div class="dashboard-card">
                     <div class="dashboard-card-icon">📊</div>
-                    <h3>Track Requests</h3>
-                    <p>Check the status of your submitted applications</p>
-                    <a href="#" class="btn">Track Now</a>
+                    <h3>Track Application</h3>
+                    <p>Track the status of your application using your Tracking ID</p>
+                    <a href="{{ url_for('citizen.track') }}" class="btn">Track Now</a>
                 </div>
             </div>
         </div>
@@ -192,4 +192,6 @@
     </script>
 </body>
 </html>
+
+
 

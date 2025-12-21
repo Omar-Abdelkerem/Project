@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Dashboard - Fast ID System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/delivery.css') }}">
+</head>
+<body>
+    <!-- Header/Navbar -->
+    <header class="navbar">
+        <div class="container nav-inner">
+            <div class="logo">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Fast ID System Logo">
+                    <span class="logo-text">Fast ID System</span>
+                </a>
+            </div>
+            <nav class="links" id="nav-links">
+                <span class="nav-link user-info">Welcome, {{ session.get('name', 'Agent') }}!</span>
+                <a href="{{ url_for('user_controller.logout') }}" class="nav-link logout-btn">Logout</a>
+            </nav>
+            <button class="nav-toggle" id="nav-toggle">☰</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="delivery-main">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>Delivery Agent Dashboard</h1>
+                <p class="subtitle">Manage assigned National ID card deliveries</p>
+            </div>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <div class="flash-container">
+                        {% for category, msg in messages %}
+                            <div class="flash-message flash-{{ category }}">
+                                <span class="flash-icon">
+                                    {% if category == 'success' %}✓{% elif category == 'error' %}✕{% else %}ℹ{% endif %}
+                                </span>
+                                <span class="flash-text">{{ msg }}</span>
+                                <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Deliveries Table -->
+            <div class="table-container">
+                {% if deliveries %}
+                    <table class="deliveries-table">
+                        <thead>
+                            <tr>
+                                <th>Delivery ID</th>
+                                <th>Request ID</th>
+                                <th>Status</th>
+                                <th>Timestamps</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in deliveries %}
+                            <tr class="delivery-row status-{{ d.Status|lower|replace(' ', '-') }}">
+                                <td class="delivery-id">{{ d.DeliveryID }}</td>
+                                <td class="request-id">{{ d.RequestID }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ d.Status|lower|replace(' ', '-') }}">
+                                        {{ d.Status }}
+                                    </span>
+                                </td>
+                                <td class="timestamps">
+                                    {% if d.OutForDeliveryAt %}
+                                        <div class="timestamp">
+                                            <strong>Out:</strong> {{ d.OutForDeliveryAt }}
+                                        </div>
+                                    {% endif %}
+                                    {% if d.DeliveredAt %}
+                                        <div class="timestamp">
+                                            <strong>Delivered:</strong> {{ d.DeliveredAt }}
+                                        </div>
+                                    {% endif %}
+                                    {% if d.FailedAt %}
+                                        <div class="timestamp">
+                                            <strong>Failed:</strong> {{ d.FailedAt }}
+                                        </div>
+                                    {% endif %}
+                                    {% if not d.OutForDeliveryAt and not d.DeliveredAt and not d.FailedAt %}
+                                        <span class="no-timestamp">No updates yet</span>
+                                    {% endif %}
+                                </td>
+                                <td class="action-cell">
+                                    {% if d.Status == "Pending" %}
+                                        <form method="POST" action="{{ url_for('delivery.update_delivery_status') }}" class="action-form">
+                                            <input type="hidden" name="delivery_id" value="{{ d.DeliveryID }}">
+                                            <input type="hidden" name="status" value="Out for Delivery">
+                                            <button type="submit" class="btn btn-primary">
+                                                📦 Out for Delivery
+                                            </button>
+                                        </form>
+                                    {% elif d.Status == "Out for Delivery" %}
+                                        <div class="action-buttons">
+                                            <form method="POST" action="{{ url_for('delivery.update_delivery_status') }}" class="action-form">
+                                                <input type="hidden" name="delivery_id" value="{{ d.DeliveryID }}">
+                                                <input type="hidden" name="status" value="Delivered">
+                                                <button type="submit" class="btn btn-success">
+                                                    ✓ Delivered
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="{{ url_for('delivery.update_delivery_status') }}" class="action-form">
+                                                <input type="hidden" name="delivery_id" value="{{ d.DeliveryID }}">
+                                                <input type="hidden" name="status" value="Failed">
+                                                <button type="submit" class="btn btn-danger">
+                                                    ✕ Failed
+                                                </button>
+                                            </form>
+                                        </div>
+                                    {% elif d.Status == "Delivered" or d.Status == "Failed" %}
+                                        <span class="final-status">Final Status</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <h2>No Deliveries Assigned</h2>
+                        <p>You don't have any National ID card deliveries assigned to you yet. Check back later!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    {% include 'partials/footer.html' %}
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/delivery.js') }}"></script>
+    <script>
+        // Mobile menu toggle
+        const toggle = document.getElementById("nav-toggle");
+        const links = document.getElementById("nav-links");
+        if (toggle) {
+            toggle.addEventListener("click", () => {
+                links.classList.toggle("open");
+            });
+        }
+
+        // Auto-hide flash messages after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function(msg) {
+                setTimeout(function() {
+                    msg.style.opacity = '0';
+                    setTimeout(function() {
+                        msg.remove();
+                    }, 300);
+                }, 5000);
+            });
+        });
+    </script>
+</body>
+</html>

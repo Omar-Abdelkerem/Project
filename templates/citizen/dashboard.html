@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications - Fast ID System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/citizen.css') }}">
+</head>
+<body>
+    <!-- Header/Navbar -->
+    <header class="navbar">
+        <div class="container nav-inner">
+            <div class="logo">
+                <a href="/">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Fast ID System Logo">
+                    <span class="logo-text">Fast ID System</span>
+                </a>
+            </div>
+            <nav class="links" id="nav-links">
+                <a href="{{ url_for('citizen.citizen_dashboard') }}" class="nav-link">My Applications</a>
+                <a href="{{ url_for('citizen.apply') }}" class="nav-link">New Application</a>
+                <a href="{{ url_for('citizen.track') }}" class="nav-link">Track Application</a>
+                <a href="{{ url_for('citizen.notifications') }}" class="nav-link">
+                    Notifications
+                    {% if notifications|length > 0 %}
+                        <span class="badge">{{ notifications|length }}</span>
+                    {% endif %}
+                </a>
+                <span class="nav-link user-info">Welcome, {{ user.get('name', 'User') }}!</span>
+                <a href="{{ url_for('user_controller.logout') }}" class="nav-link logout-btn">Logout</a>
+            </nav>
+            <button class="nav-toggle" id="nav-toggle">☰</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="citizen-main">
+        <div class="container">
+            <div class="dashboard-header">
+                <h1>My National ID Card Applications</h1>
+                <p class="subtitle">View and track all your submitted National ID card applications</p>
+                <a href="{{ url_for('citizen.apply') }}" class="btn btn-primary">+ Apply for New ID Card</a>
+            </div>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <div class="flash-container">
+                        {% for category, msg in messages %}
+                            <div class="flash-message flash-{{ category }}">
+                                <span class="flash-icon">
+                                    {% if category == 'success' %}✓{% elif category == 'error' %}✕{% else %}ℹ{% endif %}
+                                </span>
+                                <span class="flash-text">{{ msg }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Notifications Alert -->
+            {% if notifications|length > 0 %}
+                <div class="notifications-alert">
+                    <strong>You have {{ notifications|length }} unread notification(s)</strong>
+                    <a href="{{ url_for('citizen.notifications') }}">View All</a>
+                </div>
+            {% endif %}
+
+            <!-- Applications Table -->
+            <div class="table-container">
+                {% if requests %}
+                    <table class="applications-table">
+                        <thead>
+                            <tr>
+                                <th>Tracking ID</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Submitted</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in requests %}
+                            <tr class="application-row status-{{ req.Status|lower|replace(' ', '-') }}">
+                                <td class="tracking-id">
+                                    <strong>{{ req.get('TrackingID', req.get('RequestID', 'N/A')) }}</strong>
+                                </td>
+                                <td>{{ req.Type }}</td>
+                                <td>
+                                    <span class="status-badge status-{{ req.Status|lower|replace(' ', '-') }}">
+                                        {{ req.Status }}
+                                    </span>
+                                </td>
+                                <td>{{ req.get('CreatedAt', 'N/A') }}</td>
+                                <td class="action-cell">
+                                    <a href="{{ url_for('citizen.track') }}?tracking_id={{ req.get('TrackingID', req.get('RequestID', '')) }}" 
+                                       class="btn btn-sm btn-info">View Details</a>
+                                    {% if req.get('DocumentPath') %}
+                                        <a href="{{ url_for('citizen.download_document', filename=req.DocumentPath) }}" 
+                                           class="btn btn-sm btn-secondary">Download Document</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">🆔</div>
+                        <h2>No Applications Yet</h2>
+                        <p>You haven't submitted any National ID card applications. Start by applying for your ID card!</p>
+                        <a href="{{ url_for('citizen.apply') }}" class="btn btn-primary">Apply for National ID Card</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    {% include 'partials/footer.html' %}
+
+    <script>
+        const toggle = document.getElementById("nav-toggle");
+        const links = document.getElementById("nav-links");
+        if (toggle) {
+            toggle.addEventListener("click", () => {
+                links.classList.toggle("open");
+            });
+        }
+    </script>
+</body>
+</html>
