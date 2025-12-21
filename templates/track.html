@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #718096;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #c53030;
+            border: 1px solid #fc8181;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #68d391;
+        }
+
+        .result-card {
+            background: #f7fafc;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-card h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .info-value {
+            color: #2d3748;
+        }
+
+        .status {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: #fef5e7;
+            color: #d68910;
+        }
+
+        .status-in-review {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .notes-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .notes-section h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>🔍 Track Your Application</h2>
+        <p class="subtitle">Enter your tracking ID to check application status</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/citizen/track">
+            <div class="form-group">
+                <label for="tracking_id">Tracking ID</label>
+                <input type="text" id="tracking_id" name="tracking_id" placeholder="e.g., APP-20251219-0001" required>
+            </div>
+
+            <button type="submit" class="btn">Track Application</button>
+        </form>
+
+        {% if application %}
+        <div class="result-card">
+            <h3>📋 Application Details</h3>
+
+            <div class="info-row">
+                <span class="info-label">Tracking ID:</span>
+                <span class="info-value"><strong>{{ application.tracking_id }}</strong></span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Type:</span>
+                <span class="info-value">{{ application.application_type }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Description:</span>
+                <span class="info-value">{{ application.description }}</span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Status:</span>
+                <span class="info-value">
+                    {% if application.status == 'Pending' %}
+                    <span class="status status-pending">⏳ Pending</span>
+                    {% elif application.status == 'In Review' %}
+                    <span class="status status-in-review">🔄 In Review</span>
+                    {% elif application.status == 'Approved' %}
+                    <span class="status status-approved">✅ Approved</span>
+                    {% elif application.status == 'Rejected' %}
+                    <span class="status status-rejected">❌ Rejected</span>
+                    {% else %}
+                    <span class="status">{{ application.status }}</span>
+                    {% endif %}
+                </span>
+            </div>
+
+            <div class="info-row">
+                <span class="info-label">Submitted:</span>
+                <span class="info-value">{{ application.created_at }}</span>
+            </div>
+
+            {% if application.updated_at %}
+            <div class="info-row">
+                <span class="info-label">Last Updated:</span>
+                <span class="info-value">{{ application.updated_at }}</span>
+            </div>
+            {% endif %}
+
+            {% if application.document_path %}
+            <div class="info-row">
+                <span class="info-label">Document:</span>
+                <span class="info-value">📎 Attached</span>
+            </div>
+            {% endif %}
+
+            {% if application.notes %}
+            <div class="notes-section">
+                <h4>📝 Admin Notes:</h4>
+                <p style="color: #4a5568;">{{ application.notes }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="back-link">
+            <a href="/">← Back to Home</a>
+        </div>
+    </div>
+</body>
+
+</html>

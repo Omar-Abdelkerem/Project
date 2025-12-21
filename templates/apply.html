@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar h1 {
+            font-size: 24px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        .file-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #718096;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #c53030;
+            border: 1px solid #fc8181;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #68d391;
+        }
+
+        .errors-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .errors-list li {
+            padding: 5px 0;
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <h1>📝 Submit New Application</h1>
+        <a href="/citizen/dashboard">← Back to Dashboard</a>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>Application Form</h2>
+
+            {% if errors %}
+            <div class="alert alert-error">
+                <strong>⚠️ Please fix the following errors:</strong>
+                <ul class="errors-list">
+                    {% for error in errors %}
+                    <li>• {{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="/citizen/apply" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="application_type">Application Type <span class="required">*</span></label>
+                    <select id="application_type" name="application_type" required>
+                        <option value="">-- Select Type --</option>
+                        <option value="Document Issuance" {% if application_type=='Document Issuance' %}selected{% endif
+                            %}>Document Issuance</option>
+                        <option value="License Renewal" {% if application_type=='License Renewal' %}selected{% endif %}>
+                            License Renewal</option>
+                        <option value="Certificate Request" {% if application_type=='Certificate Request' %}selected{%
+                            endif %}>Certificate Request</option>
+                        <option value="Complaint" {% if application_type=='Complaint' %}selected{% endif %}>Complaint
+                        </option>
+                        <option value="Inquiry" {% if application_type=='Inquiry' %}selected{% endif %}>Inquiry</option>
+                        <option value="Other" {% if application_type=='Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description <span class="required">*</span></label>
+                    <textarea id="description" name="description" required
+                        placeholder="Please provide detailed information about your application...">{{ description or '' }}</textarea>
+                    <div class="file-info">Minimum 10 characters required</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="document">Upload Document (Optional)</label>
+                    <input type="file" id="document" name="document" accept=".pdf,.jpg,.jpeg,.png">
+                    <div class="file-info">
+                        📎 Accepted formats: PDF, JPG, PNG | Maximum size: 5MB
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">✅ Submit Application</button>
+                <a href="/citizen/dashboard" class="btn btn-secondary"
+                    style="display: block; text-align: center; text-decoration: none;">Cancel</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
